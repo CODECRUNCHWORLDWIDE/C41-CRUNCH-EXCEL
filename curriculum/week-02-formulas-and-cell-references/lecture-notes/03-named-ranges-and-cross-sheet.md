@@ -79,6 +79,17 @@ The workbook name is in square brackets, the sheet name follows, then the usual 
 
 An error value isn't a crash — it's the spreadsheet telling you *exactly* what kind of problem it hit. Learn to read them as diagnostic messages, not generic failures.
 
+```mermaid
+flowchart TD
+  A["Cell shows an error"] --> B{"Which symbol?"}
+  B -- "#REF!" --> C["Reference points at a deleted cell"]
+  B -- "#DIV/0!" --> D["Division by zero or a blank cell"]
+  B -- "#VALUE!" --> E["Wrong data type fed into the formula"]
+  B -- "#NAME?" --> F["Typo'd function or named range"]
+  B -- "#N/A" --> G["Lookup ran and found nothing"]
+```
+*Reading the error symbol tells you which of five distinct problems to go fix.*
+
 ### `#REF!` — a reference points at a cell that no longer exists
 
 ```

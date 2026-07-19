@@ -18,6 +18,15 @@ Here's the mental model: a dynamic-array formula returns not a single value but 
 
 Click the anchor cell and Excel/Sheets draws a thin blue border around the whole spill range — that border is your visual confirmation of exactly which cells belong to this one formula.
 
+```mermaid
+flowchart TD
+  A["Type formula in anchor cell A1"] --> B{"Are cells below/right empty?"}
+  B -- "Yes" --> C["Values spill into range A1:A4"]
+  B -- "No" --> D["#SPILL! error shown"]
+  C --> E["A1 holds the formula; A2:A4 hold spilled values"]
+```
+*How the engine decides whether a formula's array lands in the sheet or throws #SPILL!.*
+
 ### Why this is new
 
 Before dynamic arrays (Excel 2019 and earlier), the *only* way to get a formula to return multiple values was a **legacy array formula**: select a multi-cell range first, type the formula, then confirm with `Ctrl+Shift+Enter` (Excel would wrap it in `{curly braces}` to show it was special). It was fragile — resize the output and you had to redo the whole selection — and most Excel users never learned it. Excel 365's dynamic-array engine (2018 onward) made spilling the *default* behavior of any formula that can return more than one value, with no special key combination required. **Google Sheets never needed this fix** — its calculation engine has treated array-returning functions as spilling by default since long before Excel caught up, which is one reason `FILTER`/`SORT`/`UNIQUE` feel completely native there.
@@ -131,6 +140,15 @@ Why `*` and `+`? `TRUE`/`FALSE` behave as `1`/`0` in arithmetic. Multiplying two
 ```
 
 `CHOOSEROWS(array, row_num1, [row_num2], ...)` plucks specific rows out of an array by position — pairing it with a sorted `FILTER` is the standard way to build a "top N" without `LARGE` or a helper rank column. (`TAKE(array, rows)` is the simpler cousin — `TAKE(sorted_filtered, 5)` grabs the first 5 rows without needing an explicit list.)
+
+```mermaid
+flowchart LR
+  A["Orders!A2:J31"] --> B["FILTER: Shipped only"]
+  B --> C["SORT: by Total desc"]
+  C --> D["CHOOSEROWS: top 5"]
+  D --> E["Live report output"]
+```
+*Each function's output feeds straight into the next — no helper cells.*
 
 ## 7. Two new errors this week
 

@@ -20,6 +20,15 @@ Click a button inside the slicer (`South`, for example) and watch: the pivot tab
 
 Here's the part that actually makes a slicer a *dashboard* tool instead of a single-pivot convenience: **by default, a slicer you insert from a specific pivot is connected only to that pivot.** Click a button and only that one table reacts. To make it filter every pivot on the dashboard at once, you have to explicitly wire the connection.
 
+```mermaid
+flowchart LR
+  S["Region Slicer"] --> P1["PivotByRegion"]
+  S --> P2["PivotByCategory"]
+  S --> P3["PivotByRep"]
+  S --> P4["PivotByMonth"]
+```
+*After Report Connections, one slicer click re-filters all four pivots at once.*
+
 **In Excel:**
 
 1. Click the slicer to select it (not a pivot — the slicer itself).

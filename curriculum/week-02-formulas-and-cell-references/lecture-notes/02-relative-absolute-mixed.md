@@ -55,6 +55,18 @@ You can lock just one half of a reference:
 | `A$1` | Yes | **No** | Row locked, column floats |
 | `$A$1` | **No** | **No** | Fully absolute |
 
+```mermaid
+flowchart TD
+  A["Copying or filling a formula"] --> B{"Should the column shift?"}
+  B -- Yes --> C{"Should the row shift?"}
+  B -- No --> D{"Should the row shift?"}
+  C -- Yes --> E["A1 — fully relative"]
+  C -- No --> F["A$1 — row locked"]
+  D -- Yes --> G["$A1 — column locked"]
+  D -- No --> H["$A$1 — fully absolute"]
+```
+*Which reference form to pick, based on what should stay fixed when you fill.*
+
 Mixed references matter most when you fill a formula in **two directions** — down *and* across — from a single cell, which is exactly what a multiplication table, a distance chart, or any "every row against every column" grid needs. (This is the exact mechanic behind this week's Challenge 1 — one formula, filled across a whole 12×12 grid.)
 
 **Worked example.** Build row and column headers for a small multiplication grid:

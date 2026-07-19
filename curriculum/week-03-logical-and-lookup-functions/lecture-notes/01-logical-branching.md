@@ -48,6 +48,20 @@ Read it as a staircase: "if 90+, A; **otherwise**, if 80+, B; **otherwise**, if 
 
 **Order matters, and it's easy to get backwards.** The test must go from the *most restrictive* condition to the *least restrictive*. If you'd written `IF(B2>=60,"D",IF(B2>=90,"A",...))`, then a 92 would hit `B2>=60` first, return `"D"`, and the `>=90` test would never even run — a genuinely correct-90 student gets marked `D`. Nested `IF` doesn't warn you about this; it just silently gives the wrong answer at the *first* condition that happens to be true, not the *right* one.
 
+```mermaid
+flowchart TD
+  A["Score in B2"] --> B{"B2 >= 90?"}
+  B -->|Yes| C["Return: A"]
+  B -->|No| D{"B2 >= 80?"}
+  D -->|Yes| E["Return: B"]
+  D -->|No| F{"B2 >= 70?"}
+  F -->|Yes| G["Return: C"]
+  F -->|No| H{"B2 >= 60?"}
+  H -->|Yes| I["Return: D"]
+  H -->|No| J["Return: F"]
+```
+*The nested IF/IFS staircase must test most-restrictive first, or a high score gets caught by a lower threshold.*
+
 **Every level of nesting adds a parenthesis you must close correctly.** At four or five levels, counting closing `)`s by eye becomes real work, and one missing or extra paren gives a cryptic error instead of a clear one. Excel's formula bar color-codes matching parens as you type — use it — but this is exactly the fragility `IFS` was built to remove.
 
 ## 4. `IFS` — multiple conditions, no nesting

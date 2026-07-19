@@ -39,6 +39,16 @@ Excel and Google Sheets both evaluate a formula using the **same precedence rule
 3. **Multiplication and division** `*` `/` — equal precedence, evaluated **left to right**.
 4. **Addition and subtraction** `+` `-` — equal precedence, evaluated **left to right**.
 
+```mermaid
+flowchart TD
+  A["Formula to evaluate"] --> B["1. Parentheses first<br/>innermost to outermost"]
+  B --> C["2. Exponentiation ^"]
+  C --> D["3. Multiplication and division<br/>left to right"]
+  D --> E["4. Addition and subtraction<br/>left to right"]
+  E --> F["Final result"]
+```
+*The order Excel and Sheets always evaluate a formula in, top to bottom.*
+
 ```
 =2+3*4        → 3*4 first (=12), then 2+12  → 14   (NOT 20)
 =(2+3)*4      → parentheses first (=5), then 5*4   → 20

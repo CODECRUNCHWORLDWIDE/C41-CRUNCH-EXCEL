@@ -93,6 +93,15 @@ This is the payoff. Test it directly:
 
 Now imagine you'd built this same report as a plain range with `=D2*E2` in the Total column and `=SUM(D2:D25)` in a summary cell. Insert a column to the left of `D` and every `D2*E2` formula silently shifts to reference the wrong columns — you'd have to notice and fix every one by hand. Insert a row in the middle of `D2:D25` and the `SUM` *does* auto-expand in Excel (ranges typed directly into functions do adjust for row insertion within their span) — but only because you got lucky with where you inserted; insert at the very top or bottom edge and it won't. Structured references remove the luck entirely: they're anchored to the Table's logical structure, not to a snapshot of cell addresses taken the day you wrote the formula.
 
+```mermaid
+flowchart TD
+  A["Insert a column or row"] --> B{"Formula style"}
+  B -->|"A1 reference: D2*E2"| C["Points at wrong cells now"]
+  B -->|"Structured reference: [@Qty]*[@UnitPrice]"| D["Still correct — names didn't move"]
+```
+
+*Why a structural edit breaks A1-style formulas but leaves structured references untouched.*
+
 ## 8. Autocomplete makes this fast, not slow
 
 Structured-reference syntax looks more verbose than `D2:D25` at first glance, but you almost never type it by hand. Start a formula with `=SUM(` and click a cell inside the `Orders` Table's `Total` column — Excel and Sheets both insert the correct `Orders[Total]` (or `[@Total]`, if you clicked while inside the Table) automatically, exactly the way clicking a cell on another sheet auto-inserts `Sheet!A1` syntax (Week 2). Typing formulas by pointing and clicking, not by memorizing bracket syntax, is the actual day-to-day workflow — the syntax matters for *reading* formulas correctly, not for typing them from scratch every time.

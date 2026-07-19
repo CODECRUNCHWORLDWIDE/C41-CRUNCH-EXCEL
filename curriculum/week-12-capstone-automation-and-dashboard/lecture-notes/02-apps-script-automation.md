@@ -123,6 +123,25 @@ function flagLowStockFast(sheet, lastRow) {
 
 `getRange(row, col, numRows, numCols)` addresses a rectangular block by position — the Apps Script equivalent of VBA's `Cells(...).Resize(...)`. This pattern (read a block into a 2D array, `.map()`/loop over it in memory, write the block back) is the standard shape of almost every real Apps Script function you'll write, and it's the pattern the capstone integration lecture builds on.
 
+```mermaid
+sequenceDiagram
+  participant Script
+  participant Sheet as "Google Sheet"
+  rect rgb(240, 200, 200)
+  loop Once per row (slow)
+    Script->>Sheet: "getRange(r, 6).getValue()"
+    Sheet-->>Script: "value"
+    Script->>Sheet: "getRange(r, 7).setValue()"
+  end
+  end
+  rect rgb(200, 230, 200)
+  Script->>Sheet: "getRange(2, 6, n, 1).getValues()"
+  Sheet-->>Script: "2D array"
+  Script->>Sheet: "getRange(2, 7, n, 1).setValues()"
+  end
+```
+*Cell-by-cell round-trips versus one batched read and one batched write.*
+
 ## 6. Error handling — `try` / `catch`
 
 ```javascript

@@ -44,6 +44,14 @@ Say you want: for **Shipped** orders only, the total revenue, but only if that t
 
 Read top to bottom: `shipped` is defined first (the filtered rows), `sorted_shipped` builds on `shipped` (sorts it), `top5` builds on `sorted_shipped` (takes the first 5), and the final line just returns `top5`. Each step is one clear English-ish name — this is a genuinely different reading experience from the single 80-character nested version, even though it computes the identical result.
 
+```mermaid
+flowchart LR
+  A["shipped = FILTER(Orders, Status='Shipped')"] --> B["sorted_shipped = SORT(shipped, 9, -1)"]
+  B --> C["top5 = TAKE(sorted_shipped, 5)"]
+  C --> D["return top5"]
+```
+*Each LET name builds on the one before it, evaluated once and reused by name.*
+
 ## 3. `LET` is also a performance tool, not just cosmetic
 
 Every time a named sub-expression appears more than once in a formula *without* `LET`, the calculation engine recomputes it from scratch each time it's referenced. On a small 30-row table like `Orders`, you'll never notice. On a real dataset with tens of thousands of rows and several repeated `FILTER`/`SORT` calls, re-deriving the same intermediate array three or four times inside one cell is a measurable slowdown — and it compounds if that formula gets copied down or across many cells. `LET` computes each named value exactly once per formula evaluation, however many times its name is referenced afterward. Naming things isn't just for humans reading the formula; it's genuinely faster.

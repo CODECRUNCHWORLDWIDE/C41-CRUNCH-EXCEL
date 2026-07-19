@@ -87,6 +87,17 @@ That last row matters for building a reusable summary sheet: instead of hard-cod
 
 This returns **4274.21** (East 2659.24 + West 1614.97). The `+` between two complete `SUMIFS` calls is doing the `OR` — each call is a fully independent filter, and you're summing their two results, not trying to cram an `OR` into one call's criteria.
 
+```mermaid
+flowchart LR
+  A["Orders Table"] --> B["SUMIFS: Region = East"]
+  A --> C["SUMIFS: Region = West"]
+  B --> D["+"]
+  C --> D
+  D --> E["Combined East-or-West total"]
+```
+
+*Faking `OR` by summing two independent `SUMIFS` calls, since criteria pairs inside one call are always `AND`ed.*
+
 ## 6. Building a live summary sheet — a Region × Category matrix
 
 This is the payoff for the whole lecture. On your `Summary` sheet (created in Lecture 2), build a small matrix: regions down the side, categories across the top, `SUMIFS` filling every cell.

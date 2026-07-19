@@ -18,6 +18,15 @@ Power Query is a data-transformation engine built into Excel, exposed through th
 
 Crucially, every transform step you apply is **recorded, named, and kept in order** — not executed once and discarded like a manual Find & Replace. That recorded sequence is a *query*, and a query is a small program, written for you automatically in a language called **M** as you click, that can be re-run from scratch against a *newer* copy of the same-shaped source with one click: **Refresh**.
 
+```mermaid
+flowchart LR
+  A["Extract raw data"] --> B["Transform: clean, split, merge"]
+  B --> C["Load: Table, Data Model, or Connection Only"]
+  C --> D["Refresh against newer file"]
+  D --> A
+```
+*The Power Query ETL cycle — each Refresh re-runs Extract through Load against whatever copy of the source file exists right now.*
+
 ## 3. Opening the editor against a real file
 
 Open a blank workbook, save it as `crunch-week11.xlsx` inside your `crunch-wholesale` folder (from the README setup), and import `North_Week1.csv`:
@@ -38,6 +47,16 @@ The editor window that opens has four regions worth knowing by name, because eve
 ## 5. Reading and editing Applied Steps
 
 `North_Week1.csv` is clean, so the editor auto-generated only two steps: `Source` (the raw file connection) and `Changed Type` (Power Query's automatic best-guess type detection — it correctly inferred `Qty` and `UnitCost` as numbers and `OrderDate` as a date, because the file has no junk rows confusing that guess). Click each step in the Applied Steps pane now and watch the preview change — `Source` shows the rawest possible read of the file; `Changed Type` shows the same data with column headers now bold and each column's data-type icon (`ABC` for text, `#` for whole number, a calendar for date) set correctly in the column header.
+
+```mermaid
+flowchart LR
+  A["Source"] --> B["Promoted Headers"]
+  B --> C["Changed Type"]
+  Click["Click any step"] -.-> A
+  Click -.-> B
+  Click -.-> C
+```
+*Clicking a step in the Applied Steps pane jumps the preview back to exactly that point in the pipeline — how you debug a broken chain.*
 
 Three things you can do to any step, right-clicked from the Applied Steps pane:
 

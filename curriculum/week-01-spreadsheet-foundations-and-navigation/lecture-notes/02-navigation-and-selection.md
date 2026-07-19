@@ -36,6 +36,13 @@ This is the single highest-leverage shortcut in this lecture. `Ctrl+Arrow` (Wind
 
 From `A2`, pressing `Ctrl/Cmd+Down` lands you on `A4` (the last row of the contiguous block) — **not** `A6`, because the empty row at 5 breaks the block. Press `Ctrl/Cmd+Down` *again* from `A4` and you jump over the gap to `A6` (the next block's start). This "jump to edge, jump again to next block" behavior is exactly how you'll traverse large real-world datasets in later weeks — it's faster than scrolling and it's *precise*, landing exactly on the last real row, which matters once you start writing formulas that reference "the whole column of data."
 
+```mermaid
+flowchart LR
+  A["A2 — start"] -->|"Ctrl/Cmd+Down"| B["A4 — edge of block (row 5 is empty)"]
+  B -->|"Ctrl/Cmd+Down again"| C["A6 — start of next block"]
+```
+*Each press jumps to the next edge: end of this block, then start of the next.*
+
 All four directions work the same way: `Ctrl/Cmd+Up`, `Down`, `Left`, `Right`.
 
 ## 3. Selecting ranges
@@ -90,6 +97,13 @@ A workbook usually holds more than one sheet — raw data on one, a summary or d
 **Naming discipline:** rename every sheet the moment you create it — `Raw Data`, `Summary`, `Dashboard`, not `Sheet1`, `Sheet2`, `Sheet3`. Sheet names also become part of formula references (`Budget!B2`), so a clear name pays off the instant you start cross-referencing sheets in Exercise 3 this week and constantly from Week 2 onward.
 
 **A practical multi-sheet layout convention** you'll reuse all course long: put raw/source data on its own sheet (never mix raw data and formulas/summaries on the same sheet), and build calculations and dashboards on separate sheets that reference it. This separation — sometimes called "one source of truth" — is what keeps a workbook maintainable as it grows; you'll build exactly this shape in this week's mini-project.
+
+```mermaid
+flowchart LR
+  A["Raw Data sheet"] --> B["Calculations sheet"]
+  B --> C["Dashboard sheet"]
+```
+*Raw data stays untouched on its own sheet; calculations and dashboards reference it instead of duplicating it.*
 
 ## 6. Column width and row height
 

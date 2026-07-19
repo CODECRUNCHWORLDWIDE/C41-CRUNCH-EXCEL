@@ -36,6 +36,14 @@ Human eyes don't scan a screen uniformly — they follow a predictable path, and
 
 That ordering — headline number, supporting KPIs, trend and breakdown charts, quiet controls — is the visual hierarchy this week's dashboard is built around. Every lecture and exercise after this one assumes roughly that structure.
 
+```mermaid
+flowchart TD
+  A["Total YTD Sales - top-left, largest"] --> B["KPI row: Orders, AOV, Top Region"]
+  B --> C["Trend and breakdown charts - biggest area"]
+  C --> D["Filters: slicers and timeline - visually quiet"]
+```
+*The order a viewer's eye should hit each dashboard zone, first glance to last.*
+
 ## 4. The single-screen rule
 
 **A dashboard that requires scrolling has already failed at its one job.** The entire point of a dashboard, as distinct from a report, is that it can be taken in at a glance — the moment a viewer has to scroll to see the rest, they're doing report-reading, not dashboard-glancing, and you've lost the format's only advantage.

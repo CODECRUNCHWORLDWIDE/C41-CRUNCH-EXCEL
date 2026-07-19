@@ -43,6 +43,20 @@ Every pivot table is built from exactly four zones. Understanding what each one 
 | **Values** | The number(s) being summarized, and how | Drag `TotalRevenue` here, set to **Sum** |
 | **Filters** | A dropdown that restricts the *entire* pivot to one or a few values, without adding a row or column for it | Drag `Category` here → pick "Camping" to see only camping orders everywhere else in the pivot |
 
+```mermaid
+flowchart TD
+  A["Transactions (86 rows)"] --> B["Drag a field into a zone"]
+  B --> C["Rows: one row per value"]
+  B --> D["Columns: one column per value"]
+  B --> E["Values: summarized number"]
+  B --> F["Filters: restrict whole pivot"]
+  C --> G["Pivot table output"]
+  D --> G
+  E --> G
+  F --> G
+```
+*How dragging a field into each of the four zones shapes the pivot table output.*
+
 Build this now: drag `Region` to **Rows** and `TotalRevenue` to **Values**. You should see:
 
 | Region | Sum of TotalRevenue |

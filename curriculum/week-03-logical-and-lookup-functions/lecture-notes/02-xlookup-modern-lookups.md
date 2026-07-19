@@ -6,6 +6,15 @@
 
 Every function so far has worked on data that's already in front of it. A **lookup** answers a different question: "given this value, find its matching row somewhere else, and give me a value from that row." That's the single most common thing people do in a spreadsheet outside of pure arithmetic — look up a customer's price, an employee's department, a product's stock level — and it's what the rest of this week is about.
 
+```mermaid
+flowchart LR
+  A["lookup_value: SKU-102"] --> B["Search lookup_array (Column A)"]
+  B --> C["Find matching row"]
+  C --> D["Read return_array, same row (Column D)"]
+  D --> E["Result: 229.00"]
+```
+*A lookup walks from a known value to a matched row to the value pulled from that row.*
+
 Build the `PriceList` sheet:
 
 ```
@@ -138,6 +147,17 @@ You'll meet `VLOOKUP` constantly in older workbooks and tutorials, so you need t
 1. **It can't look left.** The lookup value must be in the leftmost column of the range. If the value you *have* is in column D and the value you *want* is in column A, `VLOOKUP` cannot do it at all — you'd have to rearrange the source data. `XLOOKUP`'s `lookup_array`/`return_array` are independent ranges, so direction never matters.
 2. **`col_index_num` is a hard-coded position, not a name.** `=VLOOKUP(A10, PriceList!A:E, 4, FALSE)` says "4th column of the range" — insert one new column into `PriceList` (say, a `Brand` column between `Product` and `Category`) and every `VLOOKUP` pointing past it now returns the *wrong* column, silently, with no error. `XLOOKUP` points its `return_array` directly at column D — insert a column elsewhere and the reference still tracks column D correctly, because it's a real range reference, not a counted offset.
 3. **The `range_lookup` default is a trap.** Omit the fourth argument (or pass nothing) and `VLOOKUP` defaults to **approximate match** — the dangerous kind covered in Section 4 — not exact. Thousands of real spreadsheets ship with `=VLOOKUP(A2, B:C, 2)`, silently doing approximate matching nobody intended, because the author forgot the trailing `,FALSE`. `XLOOKUP` defaults to **exact match**, the safe behavior, so forgetting an argument fails safe instead of failing silently.
+
+```mermaid
+flowchart LR
+  A["VLOOKUP fragilities"] --> B["Can't look left"]
+  A --> C["Hard-coded col_index_num"]
+  A --> D["range_lookup defaults to approximate"]
+  B --> E["XLOOKUP: independent lookup_array / return_array"]
+  C --> F["XLOOKUP: return_array is a real column reference"]
+  D --> G["XLOOKUP: exact match is the default"]
+```
+*The three VLOOKUP fragilities, and the XLOOKUP behavior that fixes each one.*
 
 `HLOOKUP` is `VLOOKUP`'s row-oriented twin (searches the first *row*, returns from a row below) and has the identical three problems. `XLOOKUP` handles both directions with the same one function — there's no separate "horizontal" version to remember.
 

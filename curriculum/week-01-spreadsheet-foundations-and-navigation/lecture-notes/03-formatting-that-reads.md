@@ -92,6 +92,14 @@ Applying the same five formatting choices (font, size, bold, fill, border) to ev
 
 A concrete first rule, worth setting up right now on any numeric column: select the range, choose "Greater Than," type a threshold, pick a fill color (e.g., light green for "above target"). The formatting updates **live** — change the underlying number and the highlight recalculates instantly, with zero formula written. This is the entire point: the sheet does the flagging, so a reader's eye goes straight to what matters.
 
+```mermaid
+flowchart LR
+  A["Cell value changes"] --> B{"Meets rule threshold?"}
+  B -->|"Yes"| C["Fill/format applied automatically"]
+  B -->|"No"| D["Format stays default"]
+```
+*Conditional formatting re-evaluates live on every change — no formula, no manual click.*
+
 **A word of restraint:** conditional formatting is powerful and easy to overuse. A sheet where every column has three overlapping color rules is *harder* to read than one with none — the signal drowns. Use it for the two or three things that genuinely need a reader's attention, not everything.
 
 ## 6. Putting it together: a legible sheet, before any formula
@@ -105,6 +113,19 @@ By the end of this lecture you should be able to take a raw block of typed data 
 5. Auto-fit column widths so nothing shows `#####` or gets truncated.
 6. Freeze the header row (Lecture 2) so it's visible while scrolling.
 7. Add one conditional formatting rule that highlights the single most important thing in the sheet.
+
+```mermaid
+flowchart TD
+  A["Raw typed data"] --> B["Bold header + bottom border"]
+  B --> C["Align: text left, numbers right"]
+  C --> D["Apply number formats"]
+  D --> E["Consistent ISO dates"]
+  E --> F["Auto-fit column widths"]
+  F --> G["Freeze header row"]
+  G --> H["Add one conditional formatting rule"]
+  H --> I["Legible finished report"]
+```
+*Seven formatting moves, done in order, turn raw data into a report a reader trusts at a glance.*
 
 That sequence — done from muscle memory — is exactly what [Exercise 1](../exercises/exercise-01-enter-and-format-data.md), [Challenge 1](../challenges/challenge-01-reformat-ugly-report.md), and this week's mini-project ask you to execute.
 

@@ -132,6 +132,15 @@ A data table sweeps *one or two* inputs across a *range*. Real business question
 - Every scenario-dependent input has **one stored row per scenario** (row 4 for rate, row 5 for growth) plus **one "active" row** (rows 7–8) that pulls whichever column matches the current dropdown selection using `INDEX`/`MATCH` (Week 3 skill).
 - The rest of the model references the **active** rows (`B7`, `B8`), never the raw per-scenario rows directly — so changing the dropdown at `B1` instantly re-drives the entire model, the same end result as Excel's **Show** button, built from functions you already know instead of a menu feature Sheets doesn't have.
 
+```mermaid
+flowchart LR
+  A["Dropdown B1\n(Best / Base / Worst)"] --> B["INDEX/MATCH"]
+  C["Per-scenario rows\n(one column per case)"] --> B
+  B --> D["Active row\n(B7, B8)"]
+  D --> E["Rest of the model\nreferences active row only"]
+```
+*One dropdown drives INDEX/MATCH, which drives an active row, which drives everything downstream.*
+
 This pattern is worth knowing well beyond this week — a dropdown-driven scenario switcher is one of the most useful things you can build into any Google Sheets model, precisely because Sheets has no native Scenario Manager to lean on.
 
 ## 6. Choosing the right tool for the question in front of you
@@ -144,6 +153,14 @@ This pattern is worth knowing well beyond this week — a dropdown-driven scenar
 | "Compare my three planning cases side by side." | Scenario Manager (or the Sheets switcher) |
 
 A data table shows you *everything*, unfiltered — useful for spotting a pattern or a threshold visually. Goal Seek gives you *one precise answer* to a narrow question. Scenario Manager gives you a handful of *curated, complete, named* comparisons rather than an exhaustive sweep. Most real financial models this week — and in the mini-project — use at least two of the three together: a data table to explore, then named scenarios to communicate the two or three cases that actually matter to a decision-maker.
+
+```mermaid
+flowchart TD
+  A{"What's the question?"} -->|"Show output across many input values"| B["Data table"]
+  A -->|"Find the one input for an exact output"| C["Goal Seek"]
+  A -->|"Compare a few curated, named cases"| D["Scenario Manager"]
+```
+*Pick the what-if tool that matches the shape of the question, not the other way around.*
 
 ## 7. Check yourself
 

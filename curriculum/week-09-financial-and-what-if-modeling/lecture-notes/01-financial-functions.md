@@ -18,6 +18,17 @@ Five quantities show up in almost every time-value-of-money formula, and every f
 
 Given any four of these, the fifth is computable — that's why Excel has a matching function for each: `PMT` solves for payment, `NPER` for the number of periods, `RATE` for the interest rate, `PV` for present value, `FV` for future value. This lecture focuses on `PMT` (and its siblings `IPMT`/`PPMT`) because loan amortization is the single most common real-world use, then moves to `NPV`/`IRR`, which drop the "fixed payment" assumption entirely and work on *any* sequence of cash flows.
 
+```mermaid
+flowchart TD
+  A["4 of 5 known:\nrate, nper, pv, fv, pmt"] --> B{"Which one is missing?"}
+  B -->|"pmt"| C["PMT()"]
+  B -->|"nper"| D["NPER()"]
+  B -->|"rate"| E["RATE()"]
+  B -->|"pv"| F["PV()"]
+  B -->|"fv"| G["FV()"]
+```
+*Any four time-value-of-money quantities determine the fifth — pick the matching function.*
+
 ## 2. `PMT` — the fixed loan payment, and why the sign is negative
 
 ```
@@ -74,6 +85,17 @@ A schedule is just `IPMT`/`PPMT` computed for every period, with a running balan
 ```
 
 The key formula is the **ending balance**: `=E2+D3` — previous balance plus this period's principal. Because `PPMT` is negative (a payment *reducing* the balance), adding it *subtracts* correctly — another place the sign convention from Section 2 pays off instead of fighting you. Fill rows 3–62 (60 months) and the balance column should reach exactly `0.00` at row 62 — if it lands on a stray fraction of a cent, that's normal floating-point rounding, not a bug; real bank statements handle it with a final adjusted payment.
+
+```mermaid
+flowchart TD
+  A["Balance = pv (250000)"] --> B["Compute IPMT for period n"]
+  B --> C["Compute PPMT for period n"]
+  C --> D["Balance = Balance + PPMT"]
+  D --> E{"n < nper?"}
+  E -->|"yes, n = n + 1"| B
+  E -->|"no"| F["Balance = 0.00"]
+```
+*Each amortization row repeats the same split-and-reduce cycle until the loan is paid off.*
 
 **Anchor `per` correctly when filling down.** Each row's `per` argument must equal *that row's* period number — reference the `Period` column (`=IPMT($B$1/12, A3, $B$2, $B$3)` referencing `A3`, filled down) rather than typing a literal `1`, `2`, `3…` into each `IPMT` call, or you'll silently compute the wrong period's split. This is exactly the relative-vs-absolute reference discipline from Week 2 — `A3` (the period number) must shift as you fill down; `rate`, `nper`, and `pv` must not.
 

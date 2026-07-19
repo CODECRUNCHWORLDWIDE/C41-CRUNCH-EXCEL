@@ -20,6 +20,14 @@ Now in `A2`:
 
 `A2` shows the same date — because it inherited the same underlying number and Excel/Sheets applies date formatting by default when it sees another date. Now change `A2`'s format to plain **Number** (Excel: Home → Number format dropdown → Number; Sheets: Format → Number → Number). `A2` now shows something like `46216` — that's the actual serial number sitting underneath every date you've ever typed. Set it back to Date format and it displays as a date again. **Nothing about the value changed — only the display.**
 
+```mermaid
+flowchart LR
+  A["Stored value: 46216"] --> B{"Cell number format"}
+  B -->|"Date format"| C["Displays: 2026-07-18"]
+  B -->|"Number format"| D["Displays: 46216"]
+```
+*Same underlying serial number, two different displays — only the format changed.*
+
 This single fact is why date arithmetic works at all: `EndDate - StartDate` is just subtracting two integers, and the result is a count of days. Try it:
 
 ```
@@ -140,6 +148,14 @@ Test it: type `2026-01-15` into a cell, then immediately format that same cell a
 Returns the real serial number for that date — now right-aligned, sortable, and usable in `EndDate - StartDate` math or inside `EOMONTH`. The sibling function `VALUE` does the same conversion for plain numbers that were imported as text (`=VALUE("1234")` → the number `1234`, usable in `SUM`, unlike the text version which `SUM` silently ignores).
 
 **The fast diagnostic:** if a column of "dates" won't sort chronologically, won't subtract, or `SUM`/`AVERAGE` ignores it — check alignment first. Left-aligned in a column you expect to be dates or numbers is nearly always the tell that you're looking at text, and `DATEVALUE`/`VALUE` is the fix.
+
+```mermaid
+flowchart TD
+  A["Column looks like dates/numbers"] --> B{"Left-aligned?"}
+  B -->|Yes| C["Actually text — apply DATEVALUE/VALUE"]
+  B -->|No, right-aligned| D["Real date/number — use as-is"]
+```
+*Alignment is the fastest visual check for text masquerading as a date or number.*
 
 ## 8. `DATEDIF` and `NETWORKDAYS` — real business date math
 

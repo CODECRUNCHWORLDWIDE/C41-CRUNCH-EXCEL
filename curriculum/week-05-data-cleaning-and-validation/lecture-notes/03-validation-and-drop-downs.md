@@ -101,6 +101,14 @@ For `Subcategory` (cell `C2`), instead of a static range, point the List validat
 - **Excel:** paste this formula into a helper cell (say `Lookups!H2`) so it spills the filtered list there, then set `C2`'s List validation Source to that spilling range, e.g. `=Lookups!$H$2#` (the trailing `#` — the "spill reference" operator — always means "however many cells this formula currently spills into," so the drop-down auto-adjusts if the filtered list grows or shrinks).
 - **Google Sheets:** Sheets' Data Validation "Dropdown (from a range)" can point directly at a range containing a `FILTER` formula's spill; some setups are more reliable using a named range aimed at the spill output — test yours by changing `B2` and confirming `C2`'s drop-down list updates.
 
+```mermaid
+flowchart LR
+  A["Pick Category in B2"] --> B["FILTER Lookups!F9:F17 where E = B2"]
+  B --> C["Spills matching subcategories"]
+  C --> D["Subcategory C2 dropdown updates"]
+```
+*Changing the parent cell re-filters the source range, which reshapes what the dependent drop-down offers.*
+
 Change `B2` from `Apparel` to `Footwear` and re-open `C2`'s drop-down — the options should switch from `Jackets/Shirts/Base Layers` to `Hiking Boots/Sandals/Trail Runners` immediately. If `C2` already held `Jackets` when you changed `B2`, the cell's *value* doesn't auto-clear (validation controls what you *can type next*, not what's already there) — that's a real gotcha worth building a habit around: after changing a parent drop-down, always re-check the dependent cell's current value.
 
 **Older-Excel fallback (no `FILTER`/dynamic arrays):** use `INDIRECT` with named ranges. Name each category's subcategory list identically to the category text itself (a named range literally called `Apparel`, another called `Footwear`, another called `Gear`), then set the dependent validation's source to `=INDIRECT(B2)`. This is more setup work (one named range per category, maintained by hand) but works in every Excel version back to the 2000s and in Sheets.

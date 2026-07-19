@@ -21,6 +21,15 @@ For the Crunch Outfitters workbook, "refresh the dashboard" is not one operation
 
 Skip a step or run them out of order and you get the classic automation bug: a dashboard that *looks* refreshed (the button ran, no error appeared) but is actually showing yesterday's pivot against today's raw data, because the pivot never got told to recalculate. The single most common cause of "my automated dashboard is silently wrong" is exactly this — a refresh chain with a missing or misordered link.
 
+```mermaid
+flowchart TD
+  A["Power Query pulls & cleans data"] --> B["Pivot tables refresh"]
+  B --> C["Dynamic arrays recalc Top 5 Products"]
+  C --> D["Dashboard KPIs/charts update, formatting pass runs"]
+  D --> E["Timestamp + confirmation + save"]
+```
+*Each stage depends on the one before it finishing first — skip or reorder a link and the dashboard looks refreshed but isn't.*
+
 ## 2. Excel: `RefreshAll` and waiting for it to actually finish
 
 `Application.CalculateUntilAsyncQueriesDone` (Excel 2016+ with Power Query) is the key line most VBA tutorials skip. Without it, `RefreshAll` *starts* the refresh and your macro's next line runs immediately — before the query has actually returned data — because Power Query refreshes asynchronously by default.

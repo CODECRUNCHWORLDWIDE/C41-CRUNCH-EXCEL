@@ -58,6 +58,17 @@ Classic example — factorial, registered as `FACT_R` (Excel already has a built
 
 Trace `FACT_R(4)` by hand: `4 * FACT_R(3)` → `4 * (3 * FACT_R(2))` → `4 * (3 * (2 * FACT_R(1)))` → base case hits, `FACT_R(1)` returns `1` → unwind back up: `2*1=2`, `3*2=6`, `4*6=24`. Every recursive `LAMBDA` needs exactly this shape: **a base case that stops the recursion, and a recursive case that makes the problem strictly smaller each call.** Skip the base case, or fail to shrink the problem, and you get infinite recursion — Excel/Sheets will eventually throw a stack-depth error rather than hang forever, but it's still a bug you have to fix, not a feature.
 
+```mermaid
+flowchart TD
+  A["FACT_R(4) calls FACT_R(3)"] --> B["FACT_R(3) calls FACT_R(2)"]
+  B --> C["FACT_R(2) calls FACT_R(1)"]
+  C --> D["FACT_R(1): base case, returns 1"]
+  D --> E["unwind: 2 * 1 = 2"]
+  E --> F["unwind: 3 * 2 = 6"]
+  F --> G["unwind: 4 * 6 = 24"]
+```
+*Recursion calls down to the base case, then unwinds back up multiplying as it goes.*
+
 A more spreadsheet-relevant recursive example — summing a column one row at a time instead of with `SUM`, to see the mechanics. Register this as `RUNSUM`:
 
 ```excel

@@ -72,6 +72,17 @@ Working from the inside out: strip `(`, then strip `)` from that result, then st
 
 Put this in `F2` and fill down through row 6 — every row, regardless of its original punctuation style, becomes a clean 10-digit string like `5125550110`. This "chain of `SUBSTITUTE`s" pattern is extremely common for phone numbers, product codes, and any field where several people typed the same underlying value in several different styles.
 
+```mermaid
+flowchart LR
+  A["(512) 555-0110"] --> B["strip ("]
+  B --> C["strip )"]
+  C --> D["strip -"]
+  D --> E["strip ."]
+  E --> F["TRIM"]
+  F --> G["5125550110"]
+```
+*Each SUBSTITUTE strips one punctuation style, working from the inside out.*
+
 **The optional 4th argument, `instance_num`, replaces only the *Nth* occurrence.** `=SUBSTITUTE("2024-01-15-Q1", "-", "/", 1)` replaces only the first dash, giving `"2024/01-15-Q1"` — useful when a string has the same delimiter meaning different things in different positions and you only want one of them changed.
 
 ## 5. `UPPER`, `LOWER`, `PROPER` — normalize casing
@@ -138,6 +149,14 @@ Build a normalized email in `L2` from a cleaned first initial and last name:
 ```
 
 For `Grace`/`Hopper`, this returns `"ghopper@crunch.io"`. `&` and `CONCAT` are functionally interchangeable for simple joins — `&` is slightly faster to type inline; `CONCAT` reads a bit more clearly when chaining many pieces or joining a whole range. Either is fine; **`TEXTJOIN` is the one to reach for specifically when a delimiter and empty-skipping both matter.**
+
+```mermaid
+flowchart TD
+  A["Joining text pieces"] --> B{"Need a delimiter,\nAND need blank pieces\nskipped automatically?"}
+  B -->|Yes| C["TEXTJOIN"]
+  B -->|No| D["CONCAT or &"]
+```
+*Which joining tool to reach for, based on what the join needs to do.*
 
 ## 8. Check yourself
 

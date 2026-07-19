@@ -130,6 +130,16 @@ Clean in this order, every time, and you'll avoid re-doing work:
 5. **Remove duplicates last** — now that values are normalized, the built-in tool catches everything, including what looked like near-duplicates in the raw file.
 6. **Re-run your audit formulas** from Lecture 1 to confirm zero duplicates, zero blank rows, and one clean spelling per category remain.
 
+```mermaid
+flowchart LR
+  A["Audit first"] --> B["Fix structure"]
+  B --> C["Strip whitespace"]
+  C --> D["Standardize categories"]
+  D --> E["Remove duplicates"]
+  E --> F["Re-audit"]
+```
+*The cleaning order that avoids re-doing work — each step turns more near-duplicates into exact ones the next step can catch.*
+
 Run this exact sequence on `CleanSignups` now. End state: 14 data rows (both blank rows removed, the one exact and one near-duplicate collapsed to a single row each), five clean state values, four clean tier values, and every name/email trimmed.
 
 ## 8. Check yourself

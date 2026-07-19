@@ -56,6 +56,20 @@ Before fixing anything, you need a target to fix *toward*. The data-science term
 
 `RawSignups` mostly follows this shape already (that's why it's a reasonable starting point) but violates it in spirit through inconsistency: `"CA"` and `"California"` are meant to be the *same value* of the *same variable*, but as typed they're two different strings, which breaks every formula that groups, filters, or counts by state. **Tidy data isn't just about shape — it's about every occurrence of the same real-world value being spelled identically.** That second half is what most of this week is actually about.
 
+```mermaid
+flowchart TD
+  A["Row in RawSignups"] --> B{"COUNTA/TRIM = 0?"}
+  B -->|Yes| C["Blank row"]
+  B -->|No| D{"Exact match on Name+Email+State?"}
+  D -->|Yes| E["Exact duplicate"]
+  D -->|No| F{"Normalized key matches another row?"}
+  F -->|Yes| G["Near-duplicate"]
+  F -->|No| H{"ISNUMBER on date/amount?"}
+  H -->|No| I["Type mismatch"]
+  H -->|Yes| J["Passes audit"]
+```
+*The audit sequence in Sections 4–8: each row gets checked against these questions in order before it's trusted.*
+
 ## 4. Auditing for exact duplicates
 
 The fastest way to *see* duplicates before you touch Remove Duplicates (next lecture) is to flag them with a formula, so you can inspect what you're about to delete rather than trusting a dialog blindly.

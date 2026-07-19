@@ -18,6 +18,14 @@ You don't need to adopt the exact blue/black/green convention (though it's worth
 
 > **Every number a human might reasonably want to change lives in exactly one clearly labeled cell, and every formula in the model references that cell — never retypes its value.**
 
+```mermaid
+flowchart LR
+  A["Inputs\n(blue, typed values)"] --> B["Calculations\n(black, formulas)"]
+  B --> C["Outputs\n(green, summary)"]
+  B --> D["Check cell\n(TRUE/FALSE)"]
+```
+*Assumptions flow one direction only — into calculations, then into outputs and a self-check.*
+
 ## 2. What goes wrong without this discipline
 
 Compare two versions of the same loan payment formula.

@@ -57,6 +57,16 @@ Once `Total` becomes a formula (you'll build this in Lecture 2 — `[@Qty] * [@U
 
 Click the dropdown arrow on the `Region` header and uncheck everything except `East`. The Table filters in place — other rows hide, row numbers on the left show gaps where hidden rows are, and any Total Row (next section) recalculates against only the visible rows. Clear the filter (dropdown → **Clear Filter From "Region"**, or **Select All**) to restore every row. This is the same filtering experience as `AutoFilter` on a plain range, except it's bound permanently to the Table rather than something you re-apply after every structural change.
 
+```mermaid
+flowchart TD
+  A["Convert range to Table"] --> B["Gets a name (Orders)"]
+  A --> C["Auto-expands on new row or column"]
+  A --> D["New rows inherit formulas and formatting"]
+  A --> E["Filter and sort arrows on every header"]
+```
+
+*The four concrete behaviors that change the instant a range becomes a Table.*
+
 ## 4. Table styles
 
 **Excel:** with a Table cell selected, the **Table Design** tab shows a gallery of built-in styles (Light/Medium/Dark, various color families) — click one to reformat instantly. The **Table Style Options** checkboxes next to the gallery control which visual features are on: **Header Row**, **Total Row** (next section), **Banded Rows**, **First/Last Column** (bold the edges), **Banded Columns**. Turn off **Banded Rows** and on **First Column** to see a style built for a Table where the leftmost column is the primary label, for example.

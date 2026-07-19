@@ -47,6 +47,15 @@ These three **conditional formatting** types turn a plain column of numbers into
 - **Color scales** — a gradient (commonly red → yellow → green, or a two-color scale) applied as cell background, shading low values one color and high values another. Best for scanning a whole table at once for "where are the trouble spots."
 - **Icon sets** — a small icon (arrows, traffic-light circles, flags) placed at the start of the cell based on which tier the value falls into. Best for a status signal against a fixed threshold (e.g., "is this rep above, at, or below their quota").
 
+```mermaid
+flowchart TD
+  A["Need to visualize a column of numbers"] --> B{"What's the goal?"}
+  B -->|"Compare relative size in a ranked list"| C["Data bars"]
+  B -->|"Scan a whole table for trouble spots"| D["Color scales"]
+  B -->|"Flag status against a fixed threshold"| E["Icon sets"]
+```
+*Which conditional-formatting visual fits the question you're answering.*
+
 **In Excel:** select the range, `Home → Conditional Formatting → Data Bars` (or `Color Scales`, or `Icon Sets`), pick a built-in style, or choose `More Rules...` to set custom colors and thresholds. For the KPI-adjacent context this week, apply data bars to a `PivotByRep` sales column so the viewer can see at a glance which reps are ahead without reading every number.
 
 **In Google Sheets:** select the range, `Format → Conditional formatting`, choose **Color scale** (Sheets' built-in gradient tool, directly comparable to Excel's Color Scales) in the side panel. Sheets does not have a native "Data Bars" or "Icon Sets" conditional format type as of this course's writing — the closest workaround for a bar-in-cell effect is the `SPARKLINE` function itself with `charttype: "bar"`, which draws exactly that inside a cell via formula instead of a formatting rule.

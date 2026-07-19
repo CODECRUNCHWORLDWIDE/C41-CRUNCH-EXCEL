@@ -8,6 +8,19 @@ A pivot table is precise but slow to read — someone has to scan rows and compa
 
 Don't ask "what chart works with this data" — almost any chart type technically accepts almost any data. Ask **what question the chart needs to answer**, and let the question dictate the type.
 
+```mermaid
+flowchart TD
+  Q["What question does the chart need to answer?"] --> Q1["Compare categories right now"]
+  Q --> Q2["Track change over time"]
+  Q --> Q3["Show part-to-whole breakdown"]
+  Q --> Q4["Relationship between two measures"]
+  Q1 --> C1["Bar / column chart"]
+  Q2 --> C2["Line chart"]
+  Q3 --> C3["100% stacked bar/column"]
+  Q4 --> C4["Scatter plot"]
+```
+*Letting the question shape — not the data — decide the chart type.*
+
 | Question shape | Right chart | Why |
 |---|---|---|
 | "How do these categories compare to each other, right now?" | **Bar / column chart** | Length is the easiest visual quantity for humans to compare accurately, and it works for any number of categories |

@@ -81,6 +81,16 @@ A critical nuance: a calculated field computes on the **totals**, not row-by-row
 
 Every value field has a second, independent setting beyond its aggregation: **how to display it relative to the rest of the pivot.** This is where raw sums turn into the numbers stakeholders actually want: percentages, running totals, and ranks — with zero formulas.
 
+```mermaid
+flowchart LR
+  A["Sum of TotalRevenue"] --> B["No Calculation: raw sum"]
+  A --> C["% of Grand Total"]
+  A --> D["% of Row/Column Total"]
+  A --> E["Running Total In"]
+  A --> F["Rank Largest to Smallest"]
+```
+*The same underlying Sum, reframed five different ways via "Show Values As" — no new formula needed.*
+
 **Where it lives:** Excel — right-click the value field in the pivot → **Show Values As**. Google Sheets — click the value field in the editor's Values section → **"Show as"** dropdown.
 
 | Show Values As option | What it computes | Example question it answers |

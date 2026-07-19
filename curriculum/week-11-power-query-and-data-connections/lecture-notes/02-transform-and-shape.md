@@ -48,6 +48,17 @@ Even after `Remove Top Rows`, a genuinely blank data row can survive if it appea
 
 Verify the cleaned result: five data rows, `Qty` and `UnitCost` both numeric, `ProductName` trimmed. Sum `Qty × UnitCost` across the five rows — it must read **1949.00**, the same North-warehouse checksum from the README, confirming the messy version cleaned correctly matches the already-clean `North_Week1.csv` you set up earlier.
 
+```mermaid
+flowchart LR
+  A["Raw: header junk + blank row"] --> B["Remove Top Rows"]
+  B --> C["Use First Row as Headers"]
+  C --> D["Replace Values: fix 8 units"]
+  D --> E["Trim ProductName"]
+  E --> F["Remove Blank/Error Rows"]
+  F --> G["Clean 5-row table"]
+```
+*The full cleaning pipeline for `Orders_Raw_Export.csv`, one named step per problem, in the order the problems needed fixing.*
+
 ## 6. Splitting a column
 
 Power Query splits a column the same way Week 4's `LEFT`/`FIND`/`MID` formulas did, but as a repeatable step instead of a formula you have to re-derive. Select any text column and use **Home → Split Column**, with three common modes:
@@ -75,6 +86,18 @@ Tent 4-Person,1100,950,1300
 Import it (**Get Data → From File → From Text/CSV → Transform Data**). This shape is exactly what Week 5, Lecture 2 called "wide data" — great to read, useless to pivot, filter, or join against, because "month" is smeared across the column headers instead of living inside the data as its own value.
 
 Select the `Product` column, then **Transform → Unpivot Columns → Unpivot Other Columns** (the "Other Columns" variant is the one to reach for by default — it unpivots everything you *didn't* select, which means adding a new month column to the source next quarter unpivots automatically too, with zero change to this step). The result: three columns — `Product`, `Attribute` (rename this to `Month`), and `Value` (rename this to `Sales`) — eighteen rows instead of six, one row per product-month combination.
+
+```mermaid
+flowchart LR
+  subgraph Wide["Wide: one row per product"]
+    W["Product, Jan, Feb, Mar"]
+  end
+  subgraph Long["Long: one row per product-month"]
+    L["Product, Month, Sales"]
+  end
+  Wide -->|"Unpivot Other Columns"| Long
+```
+*Unpivot turns month column headers into row values — six wide rows become eighteen tidy long rows, same data, new shape.*
 
 Verify: sum the `Sales` column across all eighteen rows — it must read **19810**, matching Trail Backpack (4250) + Hiking Boots (6530) + Camp Stove (2460) + Rain Shell (2170) + Water Bottle (1050) + Tent 4-Person (3350). This is the exact total the wide version also represents — unpivoting reshapes data, it never changes what the data *says*.
 

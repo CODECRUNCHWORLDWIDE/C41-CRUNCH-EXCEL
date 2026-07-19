@@ -13,6 +13,14 @@ These two operations get confused constantly because both combine two queries in
 
 If you're ever unsure which one a task needs, ask: "does the result need more **columns** describing the same rows, or more **rows** of the same columns?" More columns → Merge. More rows → Append.
 
+```mermaid
+flowchart TD
+  A["Combining two queries"] --> B{"Same columns, need more rows?"}
+  B -->|"Yes"| C["Append: stack into more rows"]
+  B -->|"No: different columns, shared key"| D["Merge: join into more columns"]
+```
+*The one question that decides Merge vs. Append: more rows of the same shape, or more columns describing the same rows.*
+
 ## 2. Merging Orders with Products
 
 Import `North_Week1.csv` fresh (**Get Data → From File → From Text/CSV → Transform Data**) and, this time, at the bottom of the Close & Load dropdown choose **Only Create Connection** — you don't need this landing on a sheet by itself; it exists to feed the merge. Repeat for `Products.csv`, also as **Only Create Connection**. Both now appear in the Queries pane, unloaded to any sheet, available as building blocks.
@@ -60,6 +68,17 @@ Power Query does something worth understanding, not just clicking through: it pi
 ## 6. The dependency chain
 
 Open **View → Query Dependencies** (or the **Advanced Editor**'s query list) to see it visually, or just read the Queries pane carefully: a query that was created by merging or appending *other* queries **depends on** those source queries. Your merged Orders+Products query depends on both `North_Week1` (or the folder-combine query) and `Products`. Click **Refresh All** (**Data** tab), and Power Query resolves this dependency chain correctly on its own — it re-runs the ultimate source queries (the raw file/folder reads) first, then re-runs everything that depends on them, in the correct order, automatically. You never have to manually sequence "refresh Products, then refresh the merge" — the chain handles it.
+
+```mermaid
+flowchart LR
+  North["North_Week1"] --> Combined["Combined Orders (Append/Folder)"]
+  South["South_Week1"] --> Combined
+  West["West_Week1"] --> Combined
+  Products["Products"] --> Merged["Orders + Products (Merge)"]
+  Combined --> Merged
+  Merged --> RefreshAll["Refresh All resolves this order automatically"]
+```
+*The dependency chain: source queries refresh first, then everything downstream — you never sequence it by hand.*
 
 This is also why **Only Create Connection** matters so much: a query that's just an intermediate link in this chain (like your standalone `Products` query) doesn't need — and shouldn't have — its own worksheet Table. Loading every intermediate query to a sheet clutters the workbook and slows Refresh All for no benefit; reserve **Load to Table** for the *final*, consumer-ready outputs, and leave everything upstream of that as a connection.
 

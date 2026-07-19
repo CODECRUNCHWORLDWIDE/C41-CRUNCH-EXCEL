@@ -149,6 +149,16 @@ End Sub
 
 `On Error GoTo ErrHandler` means: if any line below throws a runtime error, jump straight to the `ErrHandler:` label instead of crashing. `Err.Description` holds the human-readable reason (e.g., "the query returned an error" or "the source file could not be found"). `Exit Sub` before the label is essential — without it, the success path would fall straight through into the error-handling code even when nothing went wrong.
 
+```mermaid
+flowchart TD
+  A["On Error GoTo ErrHandler"] --> B["Run refresh statements"]
+  B -->|"No error"| C["MsgBox success"]
+  C --> D["Exit Sub"]
+  B -->|"Error thrown"| E["Jump to ErrHandler label"]
+  E --> F["MsgBox Err.Description"]
+```
+*Without `Exit Sub`, the success path would fall straight through into the error handler below it.*
+
 ## 5. Attaching a macro to something clickable
 
 Nobody wants to open the VBA editor to run a refresh. Give it a one-click surface:

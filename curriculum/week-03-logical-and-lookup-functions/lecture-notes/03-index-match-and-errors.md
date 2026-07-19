@@ -62,6 +62,16 @@ Instead of hard-coding `3, 2` into `INDEX`, feed it two `MATCH` calls that compu
 
 `MATCH("Priya", A2:A6, 0)` resolves to `3`. `MATCH("Q2", B1:E1, 0)` resolves to `2`. `INDEX(B2:E6, 3, 2)` returns `58200` — same answer as Section 2, but now driven by names instead of hard-coded positions, so it keeps working if rows get sorted or a new rep is inserted.
 
+```mermaid
+flowchart TD
+  A["MATCH('Priya', A2:A6, 0)"] --> B["Row position: 3"]
+  C["MATCH('Q2', B1:E1, 0)"] --> D["Column position: 2"]
+  B --> E["INDEX(B2:E6, 3, 2)"]
+  D --> E
+  E --> F["Result: 58200"]
+```
+*Two MATCH calls supply the row and column coordinates that INDEX reads from.*
+
 Build this as a small lookup panel below the matrix:
 
 ```
@@ -119,6 +129,14 @@ Type a rep name that doesn't exist (`Jordan`) into `B8` — instead of `#N/A`, y
 ```
 
 **The rule of thumb: use `IFNA` around lookup functions specifically** (where "not found" is an expected, normal outcome you want to handle gracefully), and reach for the broader `IFERROR` only when you genuinely want to catch every possible failure mode the same way — for instance, a formula doing several chained operations where you just want *some* safe default no matter what goes wrong, and you've already tested it enough to trust that a real bug won't hide behind the catch-all.
+
+```mermaid
+flowchart TD
+  A["Formula could fail"] --> B{"Is #N/A (not found) the only expected failure?"}
+  B -->|Yes| C["Use IFNA - lets other error types surface"]
+  B -->|No, want any failure caught| D["Use IFERROR - catches every error type"]
+```
+*Choosing IFNA versus IFERROR based on which errors you actually want to hide.*
 
 ## 8. Nesting IFERROR/IFNA around XLOOKUP too
 

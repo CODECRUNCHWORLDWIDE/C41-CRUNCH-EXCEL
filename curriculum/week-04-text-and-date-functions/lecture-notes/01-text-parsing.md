@@ -71,6 +71,17 @@ In `F2`:
 
 Returns `2019` — starting at character 5 (`2`), grab 4 characters. Fill down through row 7. `MID`'s three arguments read naturally once you count: `E`(1)`N`(2)`G`(3)`-`(4)`2`(5)`0`(6)`1`(7)`9`(8)`-`(9)`0`(10)`4`(11)`5`(12) — position 5 is exactly where the year starts, and it's always 4 characters, because every code in this column follows the identical shape.
 
+```mermaid
+flowchart LR
+  A["ENG-2019-045"] --> B["LEFT(B2, 3)"]
+  A --> C["MID(B2, 5, 4)"]
+  A --> D["RIGHT(B2, 3)"]
+  B --> E["ENG (dept)"]
+  C --> F["2019 (year)"]
+  D --> G["045 (serial)"]
+```
+*Three fixed-position slices carve one code into department, year, and serial.*
+
 **This only works because the shape is fixed.** If some codes were `ENG-19-045` (2-digit year) and others `ENG-2019-045` (4-digit year), a hard-coded `MID(B2, 5, 4)` would silently return the wrong slice on the short ones — no error, just wrong data. Section 4 is exactly the fix for that fragility.
 
 ## 4. `FIND` and `SEARCH` — locate a character instead of hard-coding its position
@@ -101,6 +112,14 @@ The `- 1` drops the comma itself, leaving just `Hopper`. For the first name, in 
 ```
 
 `FIND(",", A2) + 2` skips the comma (1 character) and the space after it (1 character), landing on `G`. The `50` is a deliberately oversized `num_chars` — `MID` simply returns however many characters actually exist if you ask for more than remain, so padding the count is a common, safe habit when you just want "everything to the end." (`TRIM` here is a preview of Lecture 2 — it mops up if a name has extra trailing spaces; harmless if there aren't any.) Fill both formulas down through row 7. Every row now splits correctly *regardless of where the comma sits*, because the position was found, not assumed.
+
+```mermaid
+flowchart TD
+  A["Hopper, Grace"] --> B["FIND comma in A2 = 7"]
+  B --> C["LEFT(A2, 7-1) -> Hopper"]
+  B --> D["MID(A2, 7+2, 50) -> Grace"]
+```
+*Find the comma's position once, then reuse it to slice both the last and first name.*
 
 **`FIND` vs. `SEARCH` — when the difference matters:** if you needed to locate `"grace"` (lowercase) inside `"Hopper, Grace"`, `FIND("grace", A2)` returns an error (case mismatch — `FIND` is case-sensitive), while `SEARCH("grace", A2)` succeeds. `SEARCH` also accepts `?` (any single character) and `*` (any run of characters) as wildcards — useful for "find something matching a pattern" rather than an exact string. Default to `SEARCH` unless you specifically need case-sensitivity (e.g., distinguishing a part code `AB-100` from `ab-100` as genuinely different values).
 

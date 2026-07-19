@@ -14,6 +14,16 @@ Each sheet is a grid:
 - **Rows** run horizontally, labeled with numbers: `1`, `2`, `3`, … A sheet has 1,048,576 rows in Excel; Google Sheets caps a whole *workbook* at 10 million cells total, spread across all sheets.
 - A **cell** is the intersection of one column and one row — the atomic unit of a spreadsheet. It holds exactly one piece of data (or one formula, which resolves to one piece of data).
 
+```mermaid
+flowchart TD
+  A["Workbook (.xlsx file)"] --> B["Sheet (tab)"]
+  B --> C["Row"]
+  B --> D["Column"]
+  C --> E["Cell — row + column intersection"]
+  D --> E
+```
+*The four levels of a spreadsheet, from the file down to its atomic unit.*
+
 ```
         A          B          C
    ┌──────────┬──────────┬──────────┐
@@ -89,6 +99,21 @@ Concretely: type `1234.5` into a cell.
 | Apply **0 decimal places** | `1234.5` (unchanged) | `1235` (rounds *visually* only) |
 
 That last row is the trap: a cell displaying `1235` might still be storing `1234.5`. If you `SUM` a column of numbers that *look* rounded to whole dollars, the total can come out "wrong" by a few cents — it isn't wrong, it's summing the true stored values, not the rounded display. This single fact explains a huge share of "why doesn't my total match" questions you'll field for the rest of your career. (There's a real function for *actually* rounding the stored value — `ROUND()` — coming in Week 2.)
+
+```mermaid
+flowchart TD
+  A["Stored value: 1234.5"] --> B{"Apply a number format"}
+  B --> C["Currency"]
+  B --> D["Percentage"]
+  B --> E["0 decimal places"]
+  C --> F["Displays: $1,234.50"]
+  D --> G["Displays: 123450.00%"]
+  E --> H["Displays: 1235 (visual round only)"]
+  F --> I["Underneath, still 1234.5"]
+  G --> I
+  H --> I
+```
+*One stored value, three different displays — formatting never touches the number underneath.*
 
 The percentage row above is its own trap in the other direction: if you type `50` and then apply Percentage format, you get `5000.00%`, not `50%` — because the formatter multiplies the *stored* value by 100 and appends `%`. To display `50%` you need to type `0.5` and *then* format as percentage, or type `50%` directly (Excel and Sheets both parse a trailing `%` on entry and store `0.5` for you).
 
